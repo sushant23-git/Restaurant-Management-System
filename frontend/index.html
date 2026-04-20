@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bawane's Hotel | Premium Dining</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f82f40;
+            --secondary: #1a1a1a;
+            --bg: #0f0f0f;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-bg: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cart-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* App Container */
+        #app {
+            margin-top: 5rem;
+            min-height: calc(100vh - 5rem);
+            padding: 2rem 5%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            opacity: 0.8;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin: -30px auto 40px;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--glass-border);
+        }
+
+        .search-container input {
+            flex: 1;
+            background: #2a2a2a;
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .search-container button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Restaurant Card Grid */
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(248, 47, 64, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rating {
+            background: #febd2f;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Forms (Login/Register) */
+        .auth-form {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .auth-form h2 {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .form-group input {
+            width: 100%;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* Menu Section */
+        .menu-header {
+            margin-bottom: 2rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .item-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .add-cart-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .add-cart-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Cart & Checkout */
+        .cart-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #555;
+            background: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .checkout-summary {
+            background: #2a2a2a;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 1rem;
+            border-top: 1px solid #444;
+            padding-top: 1rem;
+        }
+
+        /* Admin Table */
+        .admin-section {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #2a2a2a;
+            color: var(--primary);
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .badge-pending { background: #ff9800; }
+        .badge-delivered { background: #4caf50; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Notifications */
+        #notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: none;
+            z-index: 10000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .success { background: #4caf50; color: white; }
+        .error { background: #f44336; color: white; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .search-container { flex-direction: column; margin: -50px 10px 30px; }
+            .nav-links { display: none; } /* Mobile navbar improvement simplified */
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo" onclick="navigateTo('home')">Bawane's Hotel</div>
+        <div class="nav-links" id="nav-items">
+            <!-- Dynamic Nav Items -->
+        </div>
+        <div class="cart-btn" onclick="navigateTo('cart')">
+            🛒 <span id="cart-count">0</span>
+        </div>
+    </nav>
+
+    <div id="app">
+        <!-- Dynamic Content -->
+    </div>
+
+    <div id="notification"></div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let state = {
+            user: JSON.parse(localStorage.getItem('user')) || null,
+            token: localStorage.getItem('token') || null,
+            cart: [],
+            restaurants: [],
+            menuItems: [],
+            currentView: 'home',
+            selectedRestaurant: 1 // Default to Bawane's Hotel
+        };
+
+        const notify = (msg, type = 'success') => {
+            const n = document.getElementById('notification');
+            n.innerText = msg;
+            n.className = type;
+            n.style.display = 'block';
+            setTimeout(() => n.style.display = 'none', 3000);
+        };
+
+        const updateNav = () => {
+            const nav = document.getElementById('nav-items');
+            if (state.user) {
+                nav.innerHTML = `
+                    <a onclick="navigateTo('home')">Home</a>
+                    <a onclick="navigateTo('orders')">Orders</a>
+                    ${state.user.role === 'admin' ? '<a onclick="navigateTo(\'admin\')">Admin</a>' : ''}
+                    <span style="opacity: 0.6">Hi, ${state.user.name}</span>
+                    <a onclick="logout()">Logout</a>
+                `;
+            } else {
+                nav.innerHTML = `
+                    <a onclick="navigateTo('home')">Home</a>
+                    <a onclick="navigateTo('login')">Login</a>
+                    <a onclick="navigateTo('register')">Register</a>
+                `;
+            }
+        };
+
+        const logout = () => {
+            localStorage.clear();
+            state.user = null;
+            state.token = null;
+            state.cart = [];
+            document.getElementById('cart-count').innerText = '0';
+            notify('Logged out successfully');
+            navigateTo('login');
+        };
+
+        const navigateTo = (view, params = null) => {
+            state.currentView = view;
+            if (params) state.selectedRestaurant = params;
+            render();
+            window.scrollTo(0, 0);
+        };
+
+        // --- View Renders ---
+
+        const renderHome = async () => {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <div class="hero fade-in">
+                    <h1>Bawane's Hotel</h1>
+                    <p>Experience the finest delicacies crafted with passion and served with love.</p>
+                </div>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search for your favorite dish...">
+                    <button onclick="searchFood()">Search</button>
+                </div>
+                <h2 style="margin-bottom: 2rem; border-left: 5px solid var(--primary); padding-left: 1rem;">Our Special Menu</h2>
+                <div class="menu-grid" id="menuGrid">
+                    <p>Loading our delicious menu...</p>
+                </div>
+            `;
+            
+            try {
+                const res = await fetch(`${API_URL}/restaurants/${state.selectedRestaurant}/menu`);
+                state.menuItems = await res.json();
+                displayMenu(state.menuItems);
+            } catch (err) {
+                app.innerHTML += `<p style="color:red">Failed to load menu. Make sure backend and database are running.</p>`;
+            }
+        };
+
+        const displayMenu = (data) => {
+            const grid = document.getElementById('menuGrid');
+            if (!data || data.length === 0) {
+                grid.innerHTML = '<p>No items found matching your search.</p>';
+                return;
+            }
+            grid.innerHTML = data.map(item => `
+                <div class="menu-item fade-in">
+                    <div style="display:flex; justify-content:space-between; align-items: flex-start;">
+                        <h3 style="color:var(--primary)">${item.name}</h3>
+                        <span class="item-price">₹${item.price}</span>
+                    </div>
+                    <p style="font-size:0.9rem; opacity:0.8; margin: 0.5rem 0;">${item.description}</p>
+                    <button class="add-cart-btn" onclick="addToCart(${JSON.stringify(item).replace(/"/g, '&quot;')})">Add to Cart</button>
+                </div>
+            `).join('');
+        };
+
+        const searchFood = () => {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = state.menuItems.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.description.toLowerCase().includes(query) ||
+                item.category_name.toLowerCase().includes(query)
+            );
+            displayMenu(filtered);
+        };
+
+        const addToCart = (item) => {
+            if (!state.user) {
+                notify('Please login to add items to cart', 'error');
+                navigateTo('login');
+                return;
+            }
+            const existing = state.cart.find(i => i.item_id === item.item_id);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                state.cart.push({ ...item, quantity: 1 });
+            }
+            document.getElementById('cart-count').innerText = state.cart.reduce((s, i) => s + i.quantity, 0);
+            notify(`${item.name} added to cart`);
+        };
+
+        const renderCart = () => {
+            const app = document.getElementById('app');
+            if (state.cart.length === 0) {
+                app.innerHTML = `<div style="text-align:center; padding:5rem"><h2>Your cart is empty</h2><button class="submit-btn" style="width:200px" onclick="navigateTo('home')">Order Now</button></div>`;
+                return;
+            }
+
+            const total = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+
+            app.innerHTML = `
+                <div class="cart-container fade-in">
+                    <h1 style="margin-bottom:2rem">Your Cart</h1>
+                    ${state.cart.map((item, idx) => `
+                        <div class="cart-item">
+                            <div>
+                                <h3>${item.name}</h3>
+                                <p>₹${item.price}</p>
+                            </div>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="updateQty(${idx}, -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQty(${idx}, 1)">+</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                    
+                    <div class="checkout-summary">
+                        <h3>Order Summary</h3>
+                        <div class="form-group" style="margin-top:1rem">
+                            <label>Delivery Address</label>
+                            <input type="text" id="deliveryAddress" placeholder="Enter delivery address..." value="${state.user ? state.user.address || '' : ''}">
+                        </div>
+                        <div class="total-row">
+                            <span>Total</span>
+                            <span>₹${total}</span>
+                        </div>
+                        <button class="submit-btn" onclick="placeOrder()">Place Order & Pay</button>
+                    </div>
+                </div>
+            `;
+        };
+
+        const updateQty = (idx, delta) => {
+            if (state.cart[idx].quantity + delta <= 0) {
+                state.cart.splice(idx, 1);
+            } else {
+                state.cart[idx].quantity += delta;
+            }
+            document.getElementById('cart-count').innerText = state.cart.reduce((s, i) => s + i.quantity, 0);
+            renderCart();
+        };
+
+        const placeOrder = async () => {
+            const address = document.getElementById('deliveryAddress').value;
+            if (!address) return notify('Please enter address', 'error');
+
+            const total = state.cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+            
+            const orderData = {
+                restaurant_id: state.selectedRestaurant,
+                total_price: parseFloat(total.toFixed(2)),
+                delivery_address: address,
+                items: state.cart.map(item => ({
+                    item_id: item.item_id,
+                    quantity: item.quantity,
+                    price: parseFloat(item.price)
+                }))
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${state.token}`
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (res.ok) {
+                    notify('Payment Successful! Order Placed.');
+                    state.cart = [];
+                    document.getElementById('cart-count').innerText = '0';
+                    navigateTo('orders');
+                } else {
+                    const errorData = await res.json();
+                    notify(`Order failed: ${errorData.message || 'Unknown error'}`, 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                notify('Server error connecting to backend', 'error');
+            }
+        };
+
+        const renderLogin = () => {
+            document.getElementById('app').innerHTML = `
+                <div class="auth-form fade-in">
+                    <h2>Welcome Back</h2>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="••••••••">
+                    </div>
+                    <button class="submit-btn" onclick="handleLogin()">Login</button>
+                    <p style="margin-top:1.5rem; text-align:center; opacity:0.7">New here? <a onclick="navigateTo('register')" style="color:var(--primary); cursor:pointer">Register</a></p>
+                </div>
+            `;
+        };
+
+        const handleLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const res = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                state.user = data.user;
+                state.token = data.token;
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+                notify('Login successful');
+                navigateTo('home');
+            } else {
+                notify(data.message, 'error');
+            }
+        };
+
+        const renderRegister = () => {
+            document.getElementById('app').innerHTML = `
+                <div class="auth-form fade-in">
+                    <h2>Create Account</h2>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPass" placeholder="••••••••">
+                    </div>
+                    <button class="submit-btn" onclick="handleRegister()">Sign Up</button>
+                    <p style="margin-top:1.5rem; text-align:center; opacity:0.7">Already have an account? <a onclick="navigateTo('login')" style="color:var(--primary); cursor:pointer">Login</a></p>
+                </div>
+            `;
+        };
+
+        const handleRegister = async () => {
+            const full_name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPass').value;
+
+            const res = await fetch(`${API_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ full_name, email, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                notify('Registration successful. Please login.');
+                navigateTo('login');
+            } else {
+                notify(data.message, 'error');
+            }
+        };
+
+        const renderOrders = async () => {
+            const app = document.getElementById('app');
+            app.innerHTML = `<h1>Your Orders</h1><div id="orderList" style="margin-top:2rem">Loading...</div>`;
+            
+            const res = await fetch(`${API_URL}/orders/history`, {
+                headers: { 'Authorization': `Bearer ${state.token}` }
+            });
+            const orders = await res.json();
+            
+            document.getElementById('orderList').innerHTML = orders.map(o => `
+                <div class="cart-item fade-in">
+                    <div>
+                        <h3>Order #${o.order_id} - ${o.restaurant_name}</h3>
+                        <p>${new Date(o.created_at).toLocaleDateString()} | ₹${o.total_price}</p>
+                    </div>
+                    <span class="badge badge-${o.status}">${o.status.toUpperCase()}</span>
+                </div>
+            `).join('') || '<p>No orders yet.</p>';
+        };
+
+        const renderAdmin = async () => {
+            if (state.user.role !== 'admin') return navigateTo('home');
+            
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <h1 style="margin-bottom:2rem">Admin Dashboard</h1>
+                <div class="admin-section">
+                    <h3>All Orders</h3>
+                    <table id="adminOrders">
+                        <thead>
+                            <tr><th>ID</th><th>Customer</th><th>Restaurant</th><th>Total</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>Loading...</tbody>
+                    </table>
+                </div>
+            `;
+
+            const res = await fetch(`${API_URL}/orders/admin/all`, {
+                headers: { 'Authorization': `Bearer ${state.token}` }
+            });
+            const orders = await res.json();
+            
+            app.querySelector('tbody').innerHTML = orders.map(o => `
+                <tr>
+                    <td>${o.order_id}</td>
+                    <td>${o.customer_name}</td>
+                    <td>${o.restaurant_name}</td>
+                    <td>₹${o.total_price}</td>
+                    <td><span class="badge badge-${o.status}">${o.status}</span></td>
+                    <td>
+                        ${o.status === 'pending' ? `<button onclick="updateOrderStatus(${o.order_id}, 'delivered')" style="background:var(--primary); color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer">Mark Delivered</button>` : 'Complete'}
+                    </td>
+                </tr>
+            `).join('');
+        };
+
+        const updateOrderStatus = async (id, status) => {
+            await fetch(`${API_URL}/orders/${id}/status`, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${state.token}`
+                },
+                body: JSON.stringify({ status })
+            });
+            notify('Order status updated');
+            renderAdmin();
+        };
+
+        // --- Router ---
+        const render = () => {
+            updateNav();
+            switch (state.currentView) {
+                case 'home': renderHome(); break;
+                case 'login': renderLogin(); break;
+                case 'register': renderRegister(); break;
+                case 'cart': renderCart(); break;
+                case 'orders': renderOrders(); break;
+                case 'admin': renderAdmin(); break;
+                default: renderHome();
+            }
+        };
+
+        // Initialize
+        render();
+
+    </script>
+</body>
+</html>
